@@ -1,0 +1,25 @@
+<RCC>
+    <qresource prefix="/">
+        <file>source/ADD.png</file>
+        <file>source/DELETE.png</file>
+        <file>source/SELECT.png</file>
+        <file>source/UPDATE.png</file>
+        <file>source/style_2.qss</file>
+        <file>source/style_3.qss</file>
+        <file>source/style_1.qss</file>
+        <file>source/back_2.jpg</file>
+        <file>source/back_3.jpg</file>
+        <file>source/back_1.png</file>
+        <file>source/error.png</file>
+        <file>source/correct.ico</file>
+        <file>source/back_5.jpg</file>
+        <file>source/back_6.jpg</file>
+        <file>source/back_7.jpg</file>
+        <file>source/back_8.jpg</file>
+        <file>source/style_4.qss</file>
+        <file>source/style_5.qss</file>
+        <file>source/style_6.qss</file>
+        <file>source/style_7.qss</file>
+        <file>source/style_8.qss</file>
+    </qresource>
+</RCC>

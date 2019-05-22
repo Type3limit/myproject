@@ -1,0 +1,30 @@
+QMainWindow{
+background-image: url(:/source/back_8.jpg);
+}
+QDialog{
+background-image: url(:/source/back_8.jpg);
+color:white;
+border:0px;
+font:bold 15px;
+}
+QPushButton{
+background-color: rgba(100, 225, 100, 30);
+border-style: outset;
+border-width: 4px;
+border-radius: 10px;
+border-color: rgba(255, 225, 255, 30);
+font: bold 14px;
+color:rgba(0, 0, 0, 100);
+padding: 6px;
+}
+QPushButton:hover{
+background-color:rgba(100,255,100, 100);
+border-color: rgba(255, 225, 255, 200);
+color:rgba(0, 0, 0, 200);
+}
+QPushButton:pressed {
+background-color:rgba(100,255,100, 200);
+border-color: rgba(255, 225, 255, 30);
+border-style: inset;
+color:rgba(0, 0, 0, 100);
+}
