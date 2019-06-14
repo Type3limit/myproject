@@ -16,7 +16,7 @@ struct info
 
 struct student:public info
 {
-    student(QString c_id="",QString c_no="",QString c_passwd="",QString c_name="",QString c_sex="男",QString c_class_id="",QString c_dp_id="")
+    student(QString c_id="",QString c_no="",QString c_passwd="",QString c_name="",QString c_sex="",QString c_class_id="",QString c_dp_id="")
         :id(c_id),no(c_no),passwd(c_passwd),name(c_name),sex(c_sex),class_id(c_class_id),dp_id(c_dp_id){}
     QString id;
     QString no;
@@ -29,7 +29,7 @@ struct student:public info
 
 struct teacher:public info
 {
-    teacher(QString c_id="",QString c_no="",QString c_passwd="",QString c_name="",QString c_sex="男",QString c_dp_id="",QString c_tc_info="")
+    teacher(QString c_id="",QString c_no="",QString c_passwd="",QString c_name="",QString c_sex="",QString c_dp_id="",QString c_tc_info="")
         :id(c_id),no(c_no),passwd(c_passwd),name(c_name),sex(c_sex),dp_id(c_dp_id),tc_info(c_tc_info){}
     QString id;
     QString no;

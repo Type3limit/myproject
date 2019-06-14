@@ -49,7 +49,7 @@ void MainSys::connect_to_TCP()
 void MainSys::connect_to_SQL()
 {
     cur_time=QTime::currentTime();
-     ui->textEdit->append(cur_time.toString()+"\n连接到数据库……");
+    ui->textEdit->append(cur_time.toString()+"\n连接到数据库……");
     database=QSqlDatabase::addDatabase("QMYSQL");
     database.setHostName("localhost");
     database.setPort(3306);
@@ -72,90 +72,90 @@ void MainSys::readInfor()
     ui->textEdit->append(cur_time.toString()+"\n从数据库读入信息……");
     QSqlQuery query;
     if(query.exec("select COUNT(*) from student")){
-         while(query.next())
-          {
-               QTableWidgetItem* st_number=new QTableWidgetItem(query.value(0).toString());
-               ui->tableWidget->setItem(0,0,st_number);
-          }
+        while(query.next())
+        {
+            QTableWidgetItem* st_number=new QTableWidgetItem(query.value(0).toString());
+            ui->tableWidget->setItem(0,0,st_number);
+        }
     }
     if(query.exec("select COUNT(*) from teacher")){
-         while(query.next()){
-               QTableWidgetItem* tc_number=new QTableWidgetItem(query.value(0).toString());
-               ui->tableWidget->setItem(1,0,tc_number);}
+        while(query.next()){
+            QTableWidgetItem* tc_number=new QTableWidgetItem(query.value(0).toString());
+            ui->tableWidget->setItem(1,0,tc_number);}
     }
     if(query.exec("select COUNT(*) from project"))
     {
-         while(query.next()){
-               QTableWidgetItem* pr_number=new QTableWidgetItem(query.value(0).toString());
-               ui->tableWidget->setItem(2,0,pr_number);}
+        while(query.next()){
+            QTableWidgetItem* pr_number=new QTableWidgetItem(query.value(0).toString());
+            ui->tableWidget->setItem(2,0,pr_number);}
     }
-
+    
     if(query.exec("select pr_name,pr_trainaddress,pr_days from project"))
     {
-         for(int i=3;query.next();i++)
-             for(int j=0;j<3;j++)
-             {
-               QTableWidgetItem* pr_info=new QTableWidgetItem(query.value(j).toString());
-               ui->tableWidget->setItem(i,j+1,pr_info);
-             }
+        for(int i=3;query.next();i++)
+            for(int j=0;j<3;j++)
+            {
+                QTableWidgetItem* pr_info=new QTableWidgetItem(query.value(j).toString());
+                ui->tableWidget->setItem(i,j+1,pr_info);
+            }
     }
     ui->tableWidget->horizontalHeader()->setResizeContentsPrecision(QHeaderView::Stretch);
     ui->tableWidget->verticalHeader()->setResizeContentsPrecision(QHeaderView::Stretch);
     ui->tableWidget->show();
-
+    
     ui->textEdit->append("已从数据库读入主要信息\n");
 }
 
 void MainSys::on_pushButton_clicked()
 {
-   if(QMessageBox::Yes==QMessageBox::warning(this,"确认？","关闭服务将使所有的客户端丧失链接",QMessageBox::Yes,QMessageBox::Cancel))
-   {
-       QApplication* app;
-       this->close();
-       app->exit();
-   }
+    if(QMessageBox::Yes==QMessageBox::warning(this,"确认？","关闭服务将使所有的客户端丧失链接",QMessageBox::Yes,QMessageBox::Cancel))
+    {
+        QApplication* app;
+        this->close();
+        app->exit();
+    }
 }
 
 void MainSys::new_connection()
 {
     cur_time=QTime::currentTime();
     ui->textEdit->append(cur_time.toString()+"\n新的客户端接入……");
-
+    
     socket=server->nextPendingConnection();
     connect(socket,&QTcpSocket::readyRead,this,&MainSys::recv_command);
     connect(socket, SIGNAL(error(QAbstractSocket::SocketError)),
-                            this, SLOT(MSGError(QAbstractSocket::SocketError)));
+            this, SLOT(MSGError(QAbstractSocket::SocketError)));
     QString hostAddress=socket->QAbstractSocket::peerAddress().toString();
     ui->textEdit->append("客户端地址："+hostAddress);
 }
 
 void MainSys::MSGError(QAbstractSocket::SocketError)
 {
-        int error = socket->error();
-        switch(error)
-        {
-        case QAbstractSocket::RemoteHostClosedError://客户端断开
-        {
-            cur_time=QTime::currentTime();
-            ui->textEdit->append(cur_time.toString());
-            QString hostAddress=socket->QAbstractSocket::peerAddress().toString();
-            ui->textEdit->append(tr("客户端[%1]断开连接\r\n").arg(hostAddress));
-            break;
-        }
-        default:
-        {
-            error = -1;
-            QMessageBox::information(this, "show", socket->errorString());
-            break;
-        }
-        }
+    int error = socket->error();
+    switch(error)
+    {
+    case QAbstractSocket::RemoteHostClosedError://客户端断开
+    {
+        cur_time=QTime::currentTime();
+        ui->textEdit->append(cur_time.toString());
+        QString hostAddress=socket->QAbstractSocket::peerAddress().toString();
+        ui->textEdit->append(tr("客户端[%1]断开连接\r\n").arg(hostAddress));
+        break;
+    }
+    default:
+    {
+        error = -1;
+        QMessageBox::information(this, "show", socket->errorString());
+        break;
+    }
+    }
 }
 
 void MainSys::recv_command()
 {
-    data.recvbuf="";
+    data.recvbuf.clear();
     data.recvbuf=socket->readAll();
-        cur_time=QTime::currentTime();
+    cur_time=QTime::currentTime();
     ui->textEdit->append(cur_time.toString()+"\n接受到数据流:"+data.recvbuf);
     QString::iterator cmd_itr=data.recvbuf.begin();
     QString cur_cmd_buf;
@@ -255,7 +255,7 @@ void MainSys::exec_command()
         break;
     }
     default:
-    ui->textEdit->append("未知指令，忽略\n");
+        ui->textEdit->append("未知指令，忽略\n");
     }
 }
 
@@ -268,6 +268,7 @@ void MainSys::send()
 
 void MainSys::exec_student_regist()
 {
+    data.sendbuf.clear();
     student* cur_buf=new student();
     QString::iterator itr=(data.recvbuf.begin()+2);
     while(*itr!=':')
@@ -294,7 +295,7 @@ void MainSys::exec_student_regist()
     {
         cur_buf->dp_id+=*(itr++);
     }
-
+    
     QString exec_sentence=("insert into student(st_no,st_password,st_name,st_sex,class_id,dp_id) "
                            "values('"+cur_buf->no+"','"+cur_buf->passwd+"','"+cur_buf->name+"','"
                            +cur_buf->sex+"','"+cur_buf->class_id+"','"+cur_buf->dp_id+"');");
@@ -314,39 +315,40 @@ void MainSys::exec_loggin()
         cmd_buf+=(*itr++);
     }itr++;
     while(*itr!=":")
-   {
-    no_buf+=(*itr++);
+    {
+        no_buf+=(*itr++);
     }itr++;
     while(*itr!=":"&&*itr!=";"&&*itr!="\0")
-   {
-    passwd_buf+=(*itr++);
+    {
+        passwd_buf+=(*itr++);
     }
     qDebug()<<"no_buf is :"<<no_buf;
     QSqlQuery query;
     switch(cmd_buf.toInt())
     {
-           case(CMD_STUDENT_LOGIN):
-           {
-           student_loggin=query.exec("select st_password from student where st_no='"+no_buf+"';");
-           break;
-           }
-           case(CMD_TEACHER_LOGIN):
-          {
-           teacher_loggin=query.exec("select tc_password from teacher where tc_no='"+no_buf+"';");
-           break;
-           }
-           case(CMD_ADMIN_LOGIN):
-          {
-           admin_loggin=query.exec("select ad_password from admin where ad_name='"+no_buf+"';");
-           break;
-           }
-     }
-
-         QString true_passwd;
-        while(query.next())
-         true_passwd=query.value(0).toString();
-        qDebug()<<"true passwd is :"<<true_passwd<<"recv passwd is :"<<passwd_buf;
-        (true_passwd==passwd_buf)?data.sendbuf="1":data.sendbuf="0";
+    case(CMD_STUDENT_LOGIN):
+    {
+        student_loggin=query.exec("select st_password from student where st_no='"+no_buf+"';");
+        break;
+    }
+    case(CMD_TEACHER_LOGIN):
+    {
+        teacher_loggin=query.exec("select tc_password from teacher where tc_no='"+no_buf+"';");
+        break;
+    }
+    case(CMD_ADMIN_LOGIN):
+    {
+        admin_loggin=query.exec("select ad_password from admin where ad_name='"+no_buf+"';");
+        break;
+    }
+    }
+    QString true_passwd;
+    while(query.next())
+        true_passwd=query.value(0).toString();
+    qDebug()<<"true passwd is :"<<true_passwd<<"recv passwd is :"<<passwd_buf;
+    (true_passwd==passwd_buf)?data.sendbuf="1":data.sendbuf="0";
+    if(passwd_buf.isNull())
+        data.sendbuf="0";
     send();
 }
 
@@ -362,9 +364,9 @@ void MainSys::exec_select_score()
     QSqlQuery query;
     if(query.exec(
                 "select score from performance where st_name =(select st_name from student where st_no='"
-                                  +no_buf+"');"))
+                +no_buf+"');"))
         while(query.next())
-           data.sendbuf=query.value(0).toString();
+            data.sendbuf=query.value(0).toString();
     else
     {
         data.sendbuf="-1";
@@ -386,12 +388,12 @@ void MainSys::exec_join_pr()
     }
     qDebug()<<pr_id;
     QSqlQuery query;
-   if(query.exec("insert into st_project(st_id,pr_id)values"
-                 "((select st_id from student where st_no='"+no_buf+"'),'"+pr_id+"');"))
-       data.sendbuf="1";
-   else
-       data.sendbuf="0";
-   send();
+    if(query.exec("insert into st_project(st_id,pr_id)values"
+                  "((select st_id from student where st_no='"+no_buf+"'),'"+pr_id+"');"))
+        data.sendbuf="1";
+    else
+        data.sendbuf="0";
+    send();
 }
 
 void MainSys::exec_take_score()
@@ -459,12 +461,12 @@ void MainSys::exec_attempt_pr()
     while(*itr!=":"&&*itr!=";"&&*itr!='\0')
     {
         cur_buf.pr_active+=*itr++;
-
+        
     }qDebug()<<cur_buf.pr_name<<cur_buf.dp_id<<cur_buf.pr_info<<cur_buf.pr_active;
     QSqlQuery query;
     if(query.exec("insert into project (pr_name,dp_id,dp_address,pr_time,pr_trainaddress,pr_start,pr_end,pr_days,pr_info,pr_active)values('"
-               +cur_buf.pr_name+"','"+cur_buf.dp_id+"','"+cur_buf.dp_address+"','"+cur_buf.pr_time+"','"+cur_buf.pr_trainaddress
-               +"','"+cur_buf.pr_start+"','"+cur_buf.pr_end+"','"+cur_buf.pr_days+"','"+cur_buf.pr_info+"','"+cur_buf.pr_active+"'); "))
+                  +cur_buf.pr_name+"','"+cur_buf.dp_id+"','"+cur_buf.dp_address+"','"+cur_buf.pr_time+"','"+cur_buf.pr_trainaddress
+                  +"','"+cur_buf.pr_start+"','"+cur_buf.pr_end+"','"+cur_buf.pr_days+"','"+cur_buf.pr_info+"','"+cur_buf.pr_active+"'); "))
         data.sendbuf="1";
     else
         data.sendbuf="0";
@@ -473,6 +475,7 @@ void MainSys::exec_attempt_pr()
 
 void MainSys::exec_select_all()
 {
+    data.sendbuf.clear();
     int count=0;
     QSqlQuery query;
     query.exec("select COUNT(*) from student;");
@@ -510,7 +513,7 @@ void MainSys::exec_del_student()
 void MainSys::exec_update_student()
 {
     data.sendbuf.clear();
-    QString::iterator itr=data.recvbuf.begin()+2;
+    QString::iterator itr=data.recvbuf.begin()+3;
     student  cur_buf;
     while(*itr!=":")
     {
@@ -536,9 +539,10 @@ void MainSys::exec_update_student()
     {
         cur_buf.dp_id+=*itr++;
     }
+    qDebug()<<"in update :  cur_buf.no="<< cur_buf.no;
     QSqlQuery query;
-    if(query.exec("update student set st_no="+cur_buf.no+" st_name="+cur_buf.name+" st_sex="+cur_buf.sex
-               +" class_id="+cur_buf.class_id+" st_password="+cur_buf.passwd+" dp_id="+cur_buf.dp_id))
+    if(query.exec("update student set st_name='"+cur_buf.name+"',st_sex='"+cur_buf.sex
+                  +"',class_id='"+cur_buf.class_id+"',st_password='"+cur_buf.passwd+"',dp_id="+cur_buf.dp_id+" where st_no='"+cur_buf.no+"';"))
         data.sendbuf="1";
     else
         data.recvbuf="0";
@@ -557,6 +561,7 @@ void MainSys::exec_select_project()
     for(int i=0;i<count;i++)
     {
         while(query.next())
+
         {
             data.sendbuf+=(query.value(0).toString()+"^"+query.value(1).toString()+"^"+query.value(2).toString()
                            +"^"+query.value(3).toString()+"^"+query.value(4).toString()+"^"

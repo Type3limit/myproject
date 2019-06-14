@@ -6,6 +6,7 @@ int main(int argc, char *argv[])
     MainSys w;
     w.setWindowTitle("Competition Management    ------made by xuanxuandianxia");
     w.setWindowFlag(Qt::FramelessWindowHint);
+    w.setWindowIcon(QIcon(":source/SELECT.png"));
     w.show();
     return a.exec();
 }

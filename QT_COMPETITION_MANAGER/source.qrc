@@ -3,5 +3,6 @@
         <file>source/back_1.jpg</file>
         <file>source/back_2.jpg</file>
         <file>source/back_3.jpg</file>
+        <file>source/SELECT.png</file>
     </qresource>
 </RCC>
