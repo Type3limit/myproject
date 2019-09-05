@@ -1,6 +1,7 @@
 # myproject
-Just for study C++ 
+learning C++ 
 
+What a nice programing language!
 
 Tanks for attention but this is a very simple profile for learning C-plus-plus.
 If you were doing the same thing these times, it may have fun to correct my fault sentences or learning something from my exsit codes.
